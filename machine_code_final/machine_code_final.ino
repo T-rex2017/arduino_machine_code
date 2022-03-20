@@ -1,12 +1,12 @@
 // home btn vars
-int home_btn = 2; // 2
+int home_btn = 10; // 2
 bool home_btn_pressing = false;
 int home_btn_pressed = false;
 unsigned long home_btn_millis = 0;
 unsigned long home_btn_delay = 500;
 
 // feedback btn vars
-int feedback_btn = 4; // 2
+int feedback_btn = 11; // 2
 bool feedback_btn_pressing = false;
 bool stage_one_feedback_btn_pressed = false;
 bool stage_two_feedback_btn_pressed = false;
@@ -20,7 +20,7 @@ unsigned long homing_millis = 0;
 unsigned long homing_delay = 5000;
 
 // start btn vars
-int start_btn = 3; // 3
+int start_btn = 8; // 3
 bool start_btn_pressing = false;
 int start_btn_pressed = false;
 unsigned long start_btn_millis = 0;
@@ -53,18 +53,16 @@ unsigned long trigger_two_delay = 700;
 unsigned long currentMillis = 0;
 bool debug = true;
 bool debug_delay = false;
-int trigger = 10; // 10
+int trigger = 12; // 10
 
 void setup() {
   Serial.begin(115200);
-  pinMode(home_btn, INPUT_PULLUP);
-  pinMode(start_btn, INPUT_PULLUP);
-  pinMode(feedback_btn, INPUT_PULLUP);
+  pinMode(home_btn, INPUT);
+  pinMode(start_btn, INPUT);
+  pinMode(feedback_btn, INPUT);
 
-  //pinMode(the_led, OUTPUT);
   pinMode(trigger, OUTPUT);
 
-  //digitalWrite(the_led, LOW);
   digitalWrite(trigger, LOW);
 }
 
@@ -73,7 +71,7 @@ void loop() {
 
   // home button rutine
 
-  if (digitalRead(home_btn) == 0 && home_btn_pressing == false && home_btn_pressed == false) {
+  if (digitalRead(home_btn) == 1 && home_btn_pressing == false && home_btn_pressed == false) {
     home_btn_pressing = true;
     if (debug == true) {
       Serial.println("home btn pressing ...");
@@ -94,7 +92,7 @@ void loop() {
       Serial.println(currentMillis - home_btn_millis);
     }
   }
-  if (digitalRead(home_btn) == 1 && home_btn_pressing == true && home_btn_pressed == false) {
+  if (digitalRead(home_btn) == 0 && home_btn_pressing == true && home_btn_pressed == false) {
     home_btn_pressing = false;
     if (debug == true) {
       Serial.println("home btn not pressing ...");
@@ -129,7 +127,7 @@ void loop() {
 
   // start button rutine
 
-  if (digitalRead(start_btn) == 0 && start_btn_pressing == false && start_btn_pressed == false && mech_homed == true) {
+  if (digitalRead(start_btn) == 1 && start_btn_pressing == false && start_btn_pressed == false && mech_homed == true) {
     start_btn_pressing = true;
     if (debug == true) {
       Serial.println("start btn pressing ...");
@@ -150,7 +148,7 @@ void loop() {
       Serial.println(currentMillis - start_btn_millis);
     }
   }
-  if (digitalRead(start_btn) == 1 && start_btn_pressing == true && start_btn_pressed == false) {
+  if (digitalRead(start_btn) == 0 && start_btn_pressing == true && start_btn_pressed == false) {
     start_btn_pressing = false;
     if (debug == true) {
       Serial.println("start btn not pressing ...");
@@ -203,18 +201,25 @@ void loop() {
     }
   }
 
-  if (digitalRead(feedback_btn) == 0 && trigger_one_over == true && feedback_btn_pressing == false && stage_one_feedback_btn_pressed == false) {
+  if (digitalRead(feedback_btn) == 1 && trigger_one_over == true && feedback_btn_pressing == false && stage_one_feedback_btn_pressed == false) {
     feedback_btn_pressing = true;
     feedback_btn_millis = currentMillis;
-    //Serial.println("feedback....");
+    if (debug == true) {
+      Serial.println("stage one feedback btn pressing....");
+    }
   }
   if (feedback_btn_pressing == true && stage_one_feedback_btn_pressed == false && currentMillis - feedback_btn_millis >= feedback_btn_delay) {
     stage_one_feedback_btn_pressed = true;
     feedback_btn_pressing = false;
-    Serial.println("stage one feedback....");
+    if (debug == true) {
+      Serial.println("stage one feedback btn pressed....");
+    }
   }
-  if (digitalRead(feedback_btn) == 1 && feedback_btn_pressing == true && stage_one_feedback_btn_pressed == false) {
+  if (digitalRead(feedback_btn) == 0 && feedback_btn_pressing == true && stage_one_feedback_btn_pressed == false) {
     feedback_btn_pressing = false;
+    if (debug == true) {
+      Serial.println("stage one feedback btn not pressed...");
+    }
   }
 
   if (stage_one_feedback_btn_pressed == true && trigger_one_over == true && stage_one_over == false) {
@@ -271,18 +276,25 @@ void loop() {
     }
   }
 
-  if (digitalRead(feedback_btn) == 0 && trigger_two_over == true && feedback_btn_pressing == false && stage_two_feedback_btn_pressed == false) {
+  if (digitalRead(feedback_btn) == 1 && trigger_two_over == true && feedback_btn_pressing == false && stage_two_feedback_btn_pressed == false) {
     feedback_btn_pressing = true;
     feedback_btn_millis = currentMillis;
-    //Serial.println("feedback....");
+    if (debug == true) {
+      Serial.println("stage two feedback btn pressed....");
+    }
   }
   if (feedback_btn_pressing == true && stage_two_feedback_btn_pressed == false && currentMillis - feedback_btn_millis >= feedback_btn_delay) {
     stage_two_feedback_btn_pressed = true;
     feedback_btn_pressing = false;
-    Serial.println("stage two feedback....");
+    if (debug == true) {
+      Serial.println("stage two feedback btn pressed....");
+    }
   }
-  if (digitalRead(feedback_btn) == 1 && feedback_btn_pressing == true && stage_two_feedback_btn_pressed == false) {
+  if (digitalRead(feedback_btn) == 0 && feedback_btn_pressing == true && stage_two_feedback_btn_pressed == false) {
     feedback_btn_pressing = false;
+    if (debug == true) {
+      Serial.println("stage two feedback btn not pressed....");
+    }
   }
 
   if (stage_two_feedback_btn_pressed == true && trigger_two_over == true && stage_two_over == false) {
